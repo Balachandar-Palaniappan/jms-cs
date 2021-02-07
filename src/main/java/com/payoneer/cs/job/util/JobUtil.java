@@ -15,14 +15,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class JobUtil {
 
+	private static final String EXCEPTION_OCCURED = "Exception Occured: {}";
+
 	public Optional<Job> getJobData(String jobJson) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			return Optional.of(objectMapper.readValue(jobJson, Job.class));
 		} catch (JsonMappingException jsonMappingException) {
-			log.error("Exception Occured: {}", jsonMappingException);
+			log.error(EXCEPTION_OCCURED, jsonMappingException);
 		} catch (JsonProcessingException jsonProcessingException) {
-			log.error("Exception Occured: {}", jsonProcessingException);
+			log.error(EXCEPTION_OCCURED, jsonProcessingException);
 		}
 		return Optional.empty();
 	}
@@ -30,11 +32,11 @@ public class JobUtil {
 	public String getJson(Job job) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			return objectMapper.writeValueAsString(job).toString();
+			return objectMapper.writeValueAsString(job);
 		} catch (JsonMappingException jsonMappingException) {
-			log.error("Exception Occured: {}", jsonMappingException);
+			log.error(EXCEPTION_OCCURED, jsonMappingException);
 		} catch (JsonProcessingException jsonProcessingException) {
-			log.error("Exception Occured: {}", jsonProcessingException);
+			log.error(EXCEPTION_OCCURED, jsonProcessingException);
 		}
 		return "";
 	}

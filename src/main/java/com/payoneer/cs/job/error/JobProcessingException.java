@@ -8,9 +8,6 @@ import lombok.Getter;
 
 @Getter
 public class JobProcessingException extends JobExecutionException {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 817091929544865992L;
 
 	private final String jobId;

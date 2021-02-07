@@ -11,4 +11,8 @@ public interface IScheduleService {
 	List<Job> getAllJobs();
 
 	Optional<Job> getJobById(String id);
+
+	boolean deleteJob(Job job);
+
+	boolean updateScheduleJob(Job job);
 }

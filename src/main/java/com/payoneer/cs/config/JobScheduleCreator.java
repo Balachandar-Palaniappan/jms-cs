@@ -64,7 +64,7 @@ public class JobScheduleCreator {
 		jobDetail.getJobDataMap().put(job.getId().concat(job.getJobGroupName()), jobUtil.getJson(job));
 		return jobDetail;
 	}
-	
+
 	/**
 	 * Create cron trigger.
 	 *
@@ -75,10 +75,11 @@ public class JobScheduleCreator {
 	 *                           happens).
 	 * @return {@link CronTrigger}
 	 */
-	public CronTrigger createCronTrigger(String triggerName, Date startTime, String cronExpression,
+	public CronTrigger createCronTrigger(String triggerName,String groupName, Date startTime, String cronExpression,
 			int misFireInstruction, int priority) {
 		CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
 		factoryBean.setName(triggerName);
+		factoryBean.setGroup(groupName);
 		factoryBean.setStartTime(startTime);
 		factoryBean.setCronExpression(cronExpression);
 		factoryBean.setMisfireInstruction(misFireInstruction);
@@ -101,12 +102,13 @@ public class JobScheduleCreator {
 	 *                           happens).
 	 * @return {@link SimpleTrigger}
 	 */
-	public SimpleTrigger createSimpleTrigger(String triggerName, Date startTime, Long repeatTime,
+	public SimpleTrigger createSimpleTrigger(String triggerName, String groupName, Date startTime, Long repeatTime,
 			int misFireInstruction, int priority) {
 		SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
 		factoryBean.setName(triggerName);
+		factoryBean.setGroup(groupName);
 		factoryBean.setStartTime(startTime);
-		factoryBean.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+		factoryBean.setRepeatCount(1);
 		factoryBean.setRepeatInterval(repeatTime);
 		factoryBean.setMisfireInstruction(misFireInstruction);
 		factoryBean.setPriority(priority);

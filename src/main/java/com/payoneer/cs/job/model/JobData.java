@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(catalog = "quartz_demo_db", name = "job_info")
+@Table(catalog = "jms_service_db", name = "job_info")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

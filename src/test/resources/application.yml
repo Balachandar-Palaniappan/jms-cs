@@ -1,0 +1,79 @@
+spring:
+  batch:
+    job:
+      enabled: false
+  profiles:
+    active: "test"
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  quartz:
+    properties:
+      org.quartz.scheduler.instanceName:  jms-quartz-app
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.scheduler.instanceIdGenerator.class: com.payoneer.cs.config.CustomQuartzInstanceIdGenerator
+      org.quartz.threadPool.threadCount: 20
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+      org.quartz.jobStore.useProperties: true
+      org.quartz.jobStore.misfireThreshold: 60000
+      org.quartz.jobStore.tablePrefix: QRTZ_
+      org.quartz.jobStore.isClustered: true
+      org.quartz.plugin.shutdownHook.class: org.quartz.plugins.management.ShutdownHookPlugin
+      org.quartz.plugin.shutdownHook.cleanShutdown: true
+      #quartz mysql database connection
+      org.quartz.jobStore.dataSource: h2
+      org.quartz.dataSource.h2.driver: org.h2.Driver
+      org.quartz.dataSource.h2.URL: jdbc:h2:file:~/h2/jms_service_db;DATABASE_TO_UPPER=false;DB_CLOSE_ON_EXIT=FALSE;
+      org.quartz.dataSource.h2.user: root
+      org.quartz.dataSource.h2.password: admin
+      org.quartz.dataSource.h2.maxConnections: 10
+      org.quartz.dataSource.h2.idleConnectionValidationSeconds: 50
+      org.quartz.dataSource.h2.maxIdleTime: 60      
+springdoc:
+  api-docs:
+    enabled: true
+  paths-to-match: /v1, /api/**
+  packages-to-scan: com.payoneer.cs
+  swagger-ui:
+    operations-sorter: method
+    enabled: true
+  
+server:
+  servlet:
+    contextPath: /jms    
+  tomcat:
+    max-http-form-post-size: 100000000
+    max-swallow-size: 100000000 
+---
+
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  profiles: test
+  datasource:
+    platform: org.hibernate.dialect.H2Dialect
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/h2/jms_service_db;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:quartz_tables.sql';DB_CLOSE_ON_EXIT=FALSE;
+    username: root
+    password: admin
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    enabled: false
+    password: admin
+    url: jdbc:h2:file:~/h2/jms_service_db;DATABASE_TO_UPPER=false;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;
+    user: root
+app:
+  fileStore: ".store"

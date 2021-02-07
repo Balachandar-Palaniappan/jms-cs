@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class JobSchedule {
 	@Schema(description = "Type of execution")
 	private JobExecutionType executionType;
-	@Schema(description = "Scheduled date and time")
+	@Schema(description = "Scheduled date and time (yyyy-MM-dd HH:mm:ss)")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date scheduleDateTime;
 }

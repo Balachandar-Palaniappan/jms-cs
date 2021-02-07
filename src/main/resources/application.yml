@@ -23,19 +23,6 @@ spring:
       org.quartz.plugin.shutdownHook.class: org.quartz.plugins.management.ShutdownHookPlugin
       org.quartz.plugin.shutdownHook.cleanShutdown: TRUE
       
-#QUARTZ CONFIGS
-#spring.quartz.properties.org.quartz.scheduler.instanceName:  jms-quartz-app
-#spring.quartz.properties.org.quartz.scheduler.instanceId: AUTO
-#spring.quartz.properties.org.quartz.scheduler.instanceIdGenerator.class: com.payoneer.cs.config.CustomQuartzInstanceIdGenerator
-#spring.quartz.properties.org.quartz.threadPool.threadCount: 20
-#spring.quartz.properties.org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
-#spring.quartz.properties.org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-#spring.quartz.properties.org.quartz.jobStore.useProperties: true
-#spring.quartz.properties.org.quartz.jobStore.misfireThreshold: 60000
-#spring.quartz.properties.org.quartz.jobStore.tablePrefix: qrtz_
-#spring.quartz.properties.org.quartz.jobStore.isClustered: true
-#spring.quartz.properties.org.quartz.plugin.shutdownHook.class: org.quartz.plugins.management.ShutdownHookPlugin
-#spring.quartz.properties.org.quartz.plugin.shutdownHook.cleanShutdown: TRUE
 springdoc:
   api-docs:
     enabled: true
@@ -48,7 +35,9 @@ springdoc:
 server:
   servlet:
     contextPath: /jms    
-    
+  tomcat:
+    max-http-form-post-size: 100000000
+    max-swallow-size: 100000000 
 ---
 
 spring:
@@ -56,7 +45,7 @@ spring:
   datasource:
     platform: org.hibernate.dialect.MySQL5Dialect
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/quartz_demo_db
+    url: jdbc:mysql://localhost:3306/jms_service_db
     username: root
     password: admin
   jpa:
@@ -68,12 +57,39 @@ spring:
     job-store-type: jdbc
     jdbc:
       initialize-schema: never
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    enabled: true
+    password: admin
+    url: jdbc:mysql://localhost:3306/jms_service_db
+    user: root
 app:
   fileStore: ".store"
-
 ---
 
 spring:
   profiles: prod
+  datasource:
+    platform: org.hibernate.dialect.MySQL5Dialect
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jms_service_db
+    username: root
+    password: admin
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+    enabled: true
+    liquibase-schema: 
+    password: admin
+    url: jdbc:mysql://localhost:3306/jms_service_db
+    user: root
 app:
   fileStore: ".store"
