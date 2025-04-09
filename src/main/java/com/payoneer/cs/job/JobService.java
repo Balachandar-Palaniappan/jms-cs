@@ -32,6 +32,7 @@ public class JobService {
 	public String submitJob(Job job, MultipartFile file) {
 
 		String jobId = UUID.randomUUID().toString();
+		String test="value";
 
 		String fileLocation = storageService.saveFile(file, jobId);
 		job.setId(jobId);
